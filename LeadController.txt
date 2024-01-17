@@ -1,0 +1,20 @@
+/* Name        : LeadController
+ * Test Class  : LeadControllerTest
+ * Description : This is used to get the Lead Names based on the lead name searched and Lead source. 
+                 It will return the data back to UI.
+*/
+
+public with sharing class LeadController {
+    @AuraEnabled(cacheable=true)
+    public static List<Lead> getLeads(String searchKey, String leadSource) {
+        
+        String nameKey ='%'+searchKey+'%';
+        
+        String soqlQuery = 'SELECT Id, Name, Company, LeadSource, Status FROM Lead WHERE Name LIKE :nameKey AND LeadSource = :leadSource';
+
+        List<Lead> leadList = Database.query(soqlQuery);
+        System.debug('leadList>>'+leadList);
+        
+        return leadList;
+    }
+}

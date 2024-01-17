@@ -1,0 +1,30 @@
+/* Name        : createContact1
+ * Test Class  : createContact1Test
+ * Description : This class is to get the Contact List from Rest service and check if the same contact exists
+ *               If the same contact does not exists create a new Contact
+*/
+@RestResource(urlMapping='/createContact/*')
+
+global with sharing class createContact1{
+
+     @HttpPost
+    
+     global static void createContactRestService(List<String> conNamesList){
+       
+     	for (String conName : conNamesList) {
+
+        // Check if the account with the given name already exists
+        	List<Contact> existingContacts = [SELECT Id, Name FROM Contact WHERE Name = :conName LIMIT 1];
+
+            if (existingContacts.isEmpty()) {
+                // If the list is empty, then the Contact doesn't exist, proceed to create
+                Contact newContact = new Contact();
+                newContact.LastName = conName;
+                insert newContact;            
+                system.debug('Contact created successfully.');
+            } 
+            
+            else {system.debug('Contact did not create ');}
+    	}
+	 }
+}

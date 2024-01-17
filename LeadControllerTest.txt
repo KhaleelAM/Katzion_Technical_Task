@@ -1,0 +1,28 @@
+/* Name : LeadControllerTest
+ * Desc : This is a test class for LeadController
+ */
+@isTest
+public class LeadControllerTest {
+
+    @isTest
+    static void testGetLeads() {
+        // Test data setup
+        List<Lead> leadList = new List<Lead>();
+        for (Integer i = 0; i < 5; i++) {
+            leadList.add(new Lead(
+                LastName = 'TestLead' + i,
+                Company = 'TestCompany' + i,
+                LeadSource = 'Web',
+                Status = 'New'
+            ));
+        }
+        insert leadList;
+
+        // Call the method to be tested
+        Test.startTest();
+        List<Lead> result = LeadController.getLeads('TestLead', 'Web');
+        Test.stopTest();
+
+        System.assertEquals(5, result.size());
+    }
+}

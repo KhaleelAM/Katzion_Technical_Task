@@ -1,0 +1,29 @@
+/* Name : createContact1Test
+ * Desc : This is a test class for createContact1
+ */
+@isTest
+public class createContact1Test {
+
+    @isTest
+    static void testCreateContactRestService() {
+        // Test data setup
+        List<String> conNamesList = new List<String>{'TestContact1', 'TestContact2', 'TestContact3'};
+
+        // Call the REST service
+        RestRequest req = new RestRequest();
+        RestResponse res = new RestResponse();
+        req.requestURI = '/services/apexrest/createContact/';
+        req.httpMethod = 'POST';
+        req.requestBody = Blob.valueOf(JSON.serialize(conNamesList));
+
+        RestContext.request = req;
+        RestContext.response = res;
+
+        Test.startTest();
+        createContact1.createContactRestService(conNamesList);
+        Test.stopTest();
+
+        List<Contact> createdContacts = [SELECT Id, Name FROM Contact WHERE Name IN :conNamesList];
+        System.assertEquals(conNamesList.size(), createdContacts.size());
+    }
+}
